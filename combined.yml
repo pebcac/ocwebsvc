@@ -25,29 +25,36 @@ spec:
                 values:
                 - go-web-app
             topologyKey: "kubernetes.io/hostname"
-      serviceAccountName: go-web-app-sa
+      serviceAccountName: "go-web-app-sa"
       containers:
-      - name: go-web-app
-        image: docker.io/pebcac/ocwebsvc:0.5
-        ports:
-        - containerPort: 8080
-        env:
-          - name: NAMESPACE
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.namespace
-          - name: HOSTNAME
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.name
-          - name: NODE_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: spec.nodeName
-          - name: POD_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.name
+            - name: go-web-app
+              image: docker.io/pebcac/ocwebsvc:0.5
+              ports:
+              - containerPort: 8080
+              env:
+                - name: NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.namespace
+                - name: HOSTNAME
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.name
+                - name: NODE_NAME
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: spec.nodeName
+                - name: POD_NAME
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.name
+              resources:
+                limits:
+                  cpu: "1"
+                  memory: "1Gi"
+                requests:
+                  cpu: "0.5"
+                  memory: "512Mi"
 
 ---
 # Service for instance 1
@@ -92,29 +99,36 @@ spec:
                 values:
                 - go-web-app
             topologyKey: "kubernetes.io/hostname"
-      serviceAccountName: go-web-app-sa
+      serviceAccountName: "go-web-app-sa"
       containers:
-      - name: go-web-app
-        image: docker.io/pebcac/ocwebsvc:0.5
-        ports:
-        - containerPort: 8080
-        env:
-          - name: NAMESPACE
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.namespace
-          - name: HOSTNAME
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.name
-          - name: NODE_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: spec.nodeName
-          - name: POD_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.name
+            - name: go-web-app
+              image: docker.io/pebcac/ocwebsvc:0.5
+              ports:
+              - containerPort: 8080
+              env:
+                - name: NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.namespace
+                - name: HOSTNAME
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.name
+                - name: NODE_NAME
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: spec.nodeName
+                - name: POD_NAME
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.name
+              resources:
+                limits:
+                  cpu: "1"
+                  memory: "1Gi"
+                requests:
+                  cpu: "0.5"
+                  memory: "512Mi"
 
 ---
 # Service for instance 2
