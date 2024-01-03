@@ -7,27 +7,17 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: go-web-app
+      app: go-web-app1
       version: instance1
   template:
     metadata:
       labels:
-        app: go-web-app
+        app: go-web-app1
         version: instance1
     spec:
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - go-web-app
-            topologyKey: "kubernetes.io/hostname"
       serviceAccountName: "go-web-app-sa"
       containers:
-            - name: go-web-app
+            - name: go-web-app1
               image: docker.io/pebcac/ocwebsvc:0.5
               ports:
               - containerPort: 8080
@@ -64,12 +54,13 @@ metadata:
   name: go-web-app-service-instance1
 spec:
   selector:
-    app: go-web-app
+    app: go-web-app1
     version: instance1
   ports:
     - protocol: TCP
       port: 80
       targetPort: 8080
+  type: LoadBalancer
 
 ---
 # Deployment for instance 2
@@ -81,27 +72,17 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: go-web-app
+      app: go-web-app2
       version: instance2
   template:
     metadata:
       labels:
-        app: go-web-app
+        app: go-web-app2
         version: instance2
     spec:
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - go-web-app
-            topologyKey: "kubernetes.io/hostname"
       serviceAccountName: "go-web-app-sa"
       containers:
-            - name: go-web-app
+            - name: go-web-app2
               image: docker.io/pebcac/ocwebsvc:0.5
               ports:
               - containerPort: 8080
@@ -138,12 +119,13 @@ metadata:
   name: go-web-app-service-instance2
 spec:
   selector:
-    app: go-web-app
+    app: go-web-app2
     version: instance2
   ports:
     - protocol: TCP
       port: 80
       targetPort: 8080
+  type: LoadBalancer
 
 ---
 # Route for combined service
