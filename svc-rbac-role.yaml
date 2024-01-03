@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: go-web-app-sa
+  namespace: test
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: test
+  name: go-web-app-role
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services"]
+  verbs: ["get", "list", "watch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: go-web-app-rolebinding
+  namespace: test
+subjects:
+- kind: ServiceAccount
+  name: go-web-app-sa
+  namespace: test
+roleRef:
+  kind: Role
+  name: go-web-app-role
+  apiGroup: rbac.authorization.k8s.io
+
