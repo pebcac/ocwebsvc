@@ -7,12 +7,12 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: go-web-app
+      app: go-web-app1
       version: instance1
   template:
     metadata:
       labels:
-        app: go-web-app
+        app: go-web-app1
         version: instance1
     spec:
       affinity:
@@ -23,11 +23,11 @@ spec:
               - key: app
                 operator: In
                 values:
-                - go-web-app
+                - go-web-app1
             topologyKey: "kubernetes.io/hostname"
       serviceAccountName: "go-web-app-sa"
       containers:
-            - name: go-web-app
+            - name: go-web-app1
               image: docker.io/pebcac/ocwebsvc:0.5
               ports:
               - containerPort: 8080
@@ -61,10 +61,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: go-web-app-service-instance1
+  name: go-web-app1-service-instance1
 spec:
   selector:
-    app: go-web-app
+    app: go-web-app1
     version: instance1
   ports:
     - protocol: TCP
@@ -81,12 +81,12 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: go-web-app
+      app: go-web-app2
       version: instance2
   template:
     metadata:
       labels:
-        app: go-web-app
+        app: go-web-app2
         version: instance2
     spec:
       affinity:
@@ -97,11 +97,11 @@ spec:
               - key: app
                 operator: In
                 values:
-                - go-web-app
+                - go-web-app2
             topologyKey: "kubernetes.io/hostname"
       serviceAccountName: "go-web-app-sa"
       containers:
-            - name: go-web-app
+            - name: go-web-app2
               image: docker.io/pebcac/ocwebsvc:0.5
               ports:
               - containerPort: 8080
@@ -135,10 +135,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: go-web-app-service-instance2
+  name: go-web-app2-service-instance2
 spec:
   selector:
-    app: go-web-app
+    app: go-web-app2
     version: instance2
   ports:
     - protocol: TCP
@@ -156,11 +156,11 @@ spec:
   host: lb50-test.apps.ocp.pebcac.org
   to:
     kind: Service
-    name: go-web-app-service-instance1 # Default service
+    name: go-web-app1-service-instance1 # Default service
     weight: 50
   alternateBackends:
     - kind: Service
-      name: go-web-app-service-instance2
+      name: go-web-app2-service-instance2
       weight: 50
   port:
     targetPort: 8080
