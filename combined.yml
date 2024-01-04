@@ -7,17 +7,19 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: go-web-app1
+      app: go-web-app
       version: instance1
   template:
     metadata:
+      annotations:
+        sidecar.isitio.io/inject: 'true'
       labels:
-        app: go-web-app1
+        app: go-web-app
         version: instance1
     spec:
       serviceAccountName: "go-web-app-sa"
       containers:
-            - name: go-web-app1
+            - name: go-web-app
               image: docker.io/pebcac/ocwebsvc:0.5
               ports:
               - containerPort: 8080
@@ -54,7 +56,7 @@ metadata:
   name: go-web-app-service-instance1
 spec:
   selector:
-    app: go-web-app1
+    app: go-web-app
     version: instance1
   ports:
     - protocol: TCP
@@ -76,6 +78,8 @@ spec:
       version: instance2
   template:
     metadata:
+      annotations:
+        sidecar.istio.io/inject: 'true'
       labels:
         app: go-web-app2
         version: instance2
@@ -129,22 +133,22 @@ spec:
 
 ---
 # Route for combined service
-apiVersion: route.openshift.io/v1
-kind: Route
-metadata:
-  name: lb50
-  namespace: test
-spec:
-  host: lb50-test.apps.ocp.pebcac.org
-  to:
-    kind: Service
-    name: go-web-app-service-instance1 # Default service
-    weight: 50
-  alternateBackends:
-    - kind: Service
-      name: go-web-app-service-instance2
-      weight: 50
-  port:
-    targetPort: 8080
-  wildcardPolicy: None
+#apiVersion: route.openshift.io/v1
+#kind: Route
+#metadata:
+#  name: lb50
+#  namespace: test
+#spec:
+#  host: lb50-test.apps.ocp.pebcac.org
+#  to:
+#    kind: Service
+#    name: go-web-app-service-instance1 # Default service
+#    weight: 50
+#  alternateBackends:
+#    - kind: Service
+#      name: go-web-app-service-instance2
+#      weight: 50
+#  port:
+#    targetPort: 8080
+#  wildcardPolicy: None
 
