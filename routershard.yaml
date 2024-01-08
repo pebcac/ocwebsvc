@@ -1,0 +1,21 @@
+apiVersion: "config.openshift.io/v1"
+kind: RouterShard
+metadata:
+ name: test-shard
+ namespace: test
+ annotations:
+    haproxy. routers. openshift.io/router-name: test-shard
+    haproxy. routers. openshift.io/shard-by: "ip, Path"
+    haproxy. routers. openshift.io/shard-to: "0, 1"
+    haproxy. routers. openshift.io/shard-weight: "50, 50"
+spec:
+ router:
+    - name: test-shard
+      namespace: test
+      shards:
+        - name: test-shard
+          pods:
+            - name: go-web-app-instance1-5f78545997-scvk7 
+              namespace: test
+            - name: go-web-app-instance2-b7dc64d47-nj972
+              namespace: test
