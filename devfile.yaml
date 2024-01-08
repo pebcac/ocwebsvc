@@ -60,7 +60,7 @@ metadata:
   displayName: Go Runtime
   icon: https://raw.githubusercontent.com/devfile-samples/devfile-stack-icons/main/golang.svg
   language: Go
-  name: ocwebsvc
+  name: combined
   projectType: Go
   provider: Red Hat
   tags:
