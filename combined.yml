@@ -147,25 +147,25 @@ spec:
 
 ---
 # Route for combined service
-apiVersion: route.openshift.io/v1
-kind: Route
-metadata:
-  annotations:
-    haproxy.router.openshift.io/disable_cookies: 'true'
-    haproxy.router.openshift.io/balance: 'roundrobin'
-  name: lb50
-  namespace: test
-spec:
-  host: lb50-test.apps.ocp.pebcac.org
-  to:
-    kind: Service
-    name: go-web-app1-service-instance1 # Default service
-    weight: 50
-  alternateBackends:
-    - kind: Service
-      name: go-web-app2-service-instance2
-      weight: 50
-  port:
-    targetPort: 8080
-  wildcardPolicy: None
+#apiVersion: route.openshift.io/v1
+#kind: Route
+#metadata:
+#  annotations:
+#    haproxy.router.openshift.io/disable_cookies: 'true'
+#    haproxy.router.openshift.io/balance: 'roundrobin'
+#  name: lb50
+#  namespace: test
+#spec:
+#  host: lb50-test.apps.ocp.pebcac.org
+#  to:
+#    kind: Service
+#    name: go-web-app1-service-instance1 # Default service
+#    weight: 50
+#  alternateBackends:
+#    - kind: Service
+#      name: go-web-app2-service-instance2
+#      weight: 50
+#  port:
+#    targetPort: 8080
+#  wildcardPolicy: None
 

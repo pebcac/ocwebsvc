@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: label-ingress
+  namespace: test
+spec:
+  rules:
+    - host: apps.ocp.pebcac.org
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: go-web-app1-service-instance1
+                port:
+                  number: 80
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: go-web-app2-service-instance2
+                port:
+                  number: 80
+  ingressClassName: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/canary: "true"
+    nginx.ingress.kubernetes.io/canary-by-header: "Cookie"
+    nginx.ingress.kubernetes.io/canary-by-header-value: "go-web-app"
+    nginx.ingress.kubernetes.io/canary-by-header-pattern: ".*-service-instance1"
