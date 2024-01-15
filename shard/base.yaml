@@ -1,0 +1,30 @@
+apiVersion: operator.openshift.io/v1
+kind: IngressController
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"operator.openshift.io/v1","kind":"IngressController","metadata":{"annotations":{},"name":"sharded","namespace":"openshift-ingress-operator"},"spec":{"domain":"test.apps.ocp.pebcac.org","endpointPublishingStrategy":{"type":"NodePortService"},"nodePlacement":{"nodeSelector":{"matchLabels":{"node-role.kubernetes.io/worker":""}}},"routeSelector":{"matchLabels":{"type":"sharded"}}},"status":{}}
+  name: sharded
+  namespace: openshift-ingress-operator
+spec:
+  clientTLS:
+    clientCA:
+      name: ""
+    clientCertificatePolicy: ""
+  domain: test.apps.ocp.pebcac.org
+  endpointPublishingStrategy:
+    type: NodePortService
+  httpCompression: {}
+  httpEmptyRequestsPolicy: Respond
+  httpErrorCodePages:
+    name: ""
+  nodePlacement:
+    nodeSelector:
+      matchLabels:
+        node-role.kubernetes.io/worker: ""
+  routeSelector:
+    matchLabels:
+      type: sharded
+  tuningOptions:
+    reloadInterval: 0s
+  unsupportedConfigOverrides: null

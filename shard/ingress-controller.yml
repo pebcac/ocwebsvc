@@ -1,0 +1,17 @@
+apiVersion: operator.openshift.io/v1
+kind: IngressController
+metadata:
+  name: sharded
+  namespace: openshift-ingress-operator
+spec:
+  domain: test.apps.ocp.pebcac.org
+  endpointPublishingStrategy:
+    type: NodePortService
+  nodePlacement:
+    nodeSelector:
+      matchLabels:
+        node-role.kubernetes.io/worker: ""
+  routeSelector:
+    matchLabels:
+      type: sharded
+status: {}
