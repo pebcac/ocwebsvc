@@ -12,6 +12,7 @@ spec:
   template:
     metadata:
       labels:
+        type: sharded
         app: go-web-app1
         version: instance1
     spec:
@@ -61,7 +62,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: go-web-app1-service-instance1
+  name: gowebapp1
+  labels:
+    type: sharded
+    app: go-web-app1
 spec:
   selector:
     app: go-web-app1
@@ -86,6 +90,7 @@ spec:
   template:
     metadata:
       labels:
+        type: sharded
         app: go-web-app2
         version: instance2
     spec:
@@ -131,11 +136,14 @@ spec:
                   memory: "512Mi"
 
 ---
-# Service for instance 2
+#Service for instance 2
 apiVersion: v1
 kind: Service
 metadata:
-  name: go-web-app2-service-instance2
+  name: gowebapp2
+  labels:
+    type: sharded
+    app: go-web-app2
 spec:
   selector:
     app: go-web-app2
@@ -169,3 +177,107 @@ spec:
 #    targetPort: 8080
 #  wildcardPolicy: None
 
+---
+#apiVersion: networking.k8s.io/v1
+#kind: Ingress
+#metadata:
+#  name: shard-ingress
+#  namespace: test
+#  labels:
+#    type: sharded
+#  annotations:
+#    haproxy.router.openshift.io/disable_cookies: 'true'
+#    haproxy.router.openshift.io/balance: 'canary'
+#spec:
+#  rules:
+#  - http:
+#      paths:
+#      - path: /
+#        pathType: Prefix
+#        backend:
+#          service:
+#            name: gowebapp1
+#            port:
+#              number: 80
+#      - path: /
+#        pathType: Prefix
+#        backend:
+#          service:
+#            name: gowebapp2
+#            port:
+#              number: 80
+#    canary:
+#      weight: 50
+
+---
+#apiVersion: route.openshift.io/v1
+#kind: Route
+#metadata:
+#  labels:
+#    type: sharded 
+#  name: lb50
+#  namespace: test
+#spec:
+#  subdomain: lb50-test
+#  tls:
+#    termination: edge
+#  to:
+#    kind: Service
+#    name: gowebapp1
+#    weight: 50
+#  alternateBackends:
+#    - kind: Service
+#      name: gowebapp2
+#      weight: 50
+
+---
+#apiVersion: networking.k8s.io/v1
+#kind: Ingress
+#metadata:
+#  name: shard-ingress
+#  namespace: test
+#  labels:
+#    type: sharded
+#  annotations:
+#    haproxy.router.openshift.io/disable_cookies: 'true'
+#    haproxy.router.openshift.io/balance: 'canary'
+#spec:
+#  domain: lb50-test.apps.ocp.pebcac.org
+#  rules: 
+#  - http:
+#      paths:
+#      - path: /
+#        pathType: Prefix
+#        backend:
+#          service:
+#            name: gowebapp1
+#            port:
+#              number: 80
+#      - path: /
+#        pathType: Prefix
+#        backend:
+#          service:
+#            name: gowebapp2
+#            port:
+#              number: 80
+#    canary:
+#      weight: 50
+
+---
+apiVersion: operator.openshift.io/v1
+kind: IngressController
+metadata:
+  name: sharded
+  namespace: openshift-ingress-operator
+spec:
+  domain: test.apps.ocp.pebcac.org
+  endpointPublishingStrategy:
+    type: NodePortService
+  nodePlacement:
+    nodeSelector:
+      matchLabels:
+        node-role.kubernetes.io/worker: ""
+  routeSelector:
+    matchLabels:
+      type: sharded
+status: {}
